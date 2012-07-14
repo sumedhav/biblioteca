@@ -1,17 +1,15 @@
 package com.twu28.biblioteca;
 
-import java.util.ArrayList;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Sumedha Verma
  * Date: 7/13/12
  * Time: 5:55 PM
  *
+ * This class allows the user to view the books in the library, reserve a book for collection
+ * and check their library number.
  */
 public class Library {
-
-    ArrayList<Book> bookList=new ArrayList<Book>();
 
     //prints the list of menu options on the console
     public void printMenuOptions() {
@@ -33,59 +31,94 @@ public class Library {
         }
         switch(option) {
             case 1: optionSelected="view books";
-                    viewBookList();
+                    viewBookList();  //view the list of books
                     break;
             case 2: optionSelected="reserve books";
+                    viewBookList();
+                    String selectedBook=new LibraryHelper().getUserInput("\nEnter the serial number of the book you want to reserve");
+                    reserveBook(selectedBook);  //reserve the specified book if available
                     break;
             case 3: optionSelected="check library number";
+                    String stringLibraryNumber=new LibraryHelper().getUserInput("\nEnter your library number");
+                    checkLibraryNumber(stringLibraryNumber);
                     break;
-            default: break;
+            default: System.out.println(optionSelected);
+                     break;
         }
-        System.out.println(optionSelected);
         return optionSelected;
     }
 
     //displays the list of books
     public void viewBookList() {
-        initializeBookList();
         int serial_no=1;
         System.out.println("\n---------List of Books---------");
         System.out.printf("%-5s%-15s%-15s%-15s%-12s\n", "SNo.","Title","Author","ISBN-No.","Availability");
-        for (Book book : bookList) {
+        for (Book book : ListCreation.bookList) {
             System.out.printf("%-5d", serial_no);
-            book.viewBookDetails();
+            book.viewBookDetails();  //printing the book details on the console
             serial_no++;
         }
     }
 
-    public void reserveBook() {
-
+    //reserves the book if available
+    public Object reserveBook(String selectedBook) {
+        int selectedBookNumber;
+        String outputString="Please enter a numerical value.";
+        try {
+            selectedBookNumber=Integer.parseInt(selectedBook);
+        } catch(Exception e) {
+            System.out.println(outputString);
+            return outputString;
+        }
+        try {
+            Book book=ListCreation.bookList.get(selectedBookNumber-1);
+            if(book.getAvailability().equals("available")) {
+                outputString="Thank You! Enjoy the book.";
+                book.setAvailability("reserved");
+            } else {
+                outputString="Sorry we don't have that book yet.";
+            }
+            System.out.println(outputString);
+        } catch(Exception e) {
+            outputString="Sorry we don't have that book yet.";
+            System.out.println(outputString);
+        }
+        return outputString;
     }
 
-    //creates a list of books
-    public void initializeBookList() {
-        addBook("Book1","Author1","ISBN-1111","available");
-        addBook("Book2","Author2","ISBN-2222","not available");
-        addBook("Book3","Author3","ISBN-3333","available");
-        addBook("Book4","Author4","ISBN-4444","available");
-        addBook("Book5","Author5","ISBN-5555","not available");
-    }
-
-    //adds a book to the list of books
-    public void addBook(String title, String author, String isbn_no, String availability) {
-        Book book=new Book(title, author, isbn_no, availability);
-        bookList.add(book);
+    public Object checkLibraryNumber(String stringLibraryNumber) {
+        int libraryNumber;
+        String outputString="Library number should be numeric.";
+        try {
+            libraryNumber=Integer.parseInt(stringLibraryNumber);
+        } catch(Exception e) {
+            System.out.println(outputString);
+            return outputString;
+        }
+        outputString="Please talk to Librarian. Thank you.";
+        for(Customer customer: ListCreation.customerList) {
+            if(customer.getLibraryNumber()==libraryNumber) {
+                customer.viewCustomerDetails();
+                System.out.println(outputString);
+                return outputString;
+            }
+        }
+        System.out.println("No such library number found!");
+        System.out.println(outputString);
+        return outputString;
     }
 
     public static void main(String args[]) {
         Library library=new Library();
         LibraryHelper libraryHelper=new LibraryHelper();
+        ListCreation listCreation=new ListCreation();
         String selectedOption, choice="y";
-        System.out.println("\n!!!Welcome to the Banglore Public Library System!!!\n");
+        listCreation.initializeLists();  //create the required lists
+        System.out.println("\n!!!Welcome to the Bangalore Public Library System!!!\n");
         while(choice.equals("y") || choice.equals("Y")) {
-            library.printMenuOptions();
-            selectedOption=libraryHelper.getUserInput("\nEnter your option");
-            library.checkOption(selectedOption);
+            library.printMenuOptions();  //printing the menu options
+            selectedOption=libraryHelper.getUserInput("\nEnter your option");  //getting option from the user
+            library.checkOption(selectedOption);  //checking the option selected by the user
             choice=libraryHelper.getUserInput("\nDo you want to continue? (y/n)");
             System.out.println();
         }

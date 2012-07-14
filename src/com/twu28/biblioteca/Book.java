@@ -6,7 +6,7 @@ package com.twu28.biblioteca;
  * Date: 7/13/12
  * Time: 11:21 PM
  *
- *
+ * This class contains the attributes of a book and provides methods to handle them.
  */
 public class Book {
 

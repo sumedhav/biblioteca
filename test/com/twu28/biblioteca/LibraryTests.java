@@ -16,17 +16,8 @@ public class LibraryTests {
 
     @Test
     public void optionEnteredIsOne() throws Exception {
+        new ListCreation().initializeBookList();
         assertEquals("view books", new Library().checkOption("1"));
-    }
-
-    @Test
-    public void optionEnteredIsTwo() throws Exception {
-        assertEquals("reserve books", new Library().checkOption("2"));
-    }
-
-    @Test
-    public void optionEnteredIsThree() throws Exception {
-        assertEquals("check library number", new Library().checkOption("3"));
     }
 
     @Test
@@ -37,5 +28,35 @@ public class LibraryTests {
     @Test
     public void optionEnteredIsNotNumerical() throws Exception {
         assertEquals("Select a valid option!", new Library().checkOption("hi"));
+    }
+
+    @Test
+    public void reserveBookNumberOne() throws Exception {
+        new ListCreation().initializeBookList();
+        assertEquals("Thank You! Enjoy the book.", new Library().reserveBook("1"));
+    }
+
+    @Test
+    public void reserveBookNumberTwo() throws Exception {
+        new ListCreation().initializeBookList();
+        assertEquals("Sorry we don't have that book yet.", new Library().reserveBook("2"));
+    }
+
+    @Test
+    public void reserveBookNumberNotNumerical() throws Exception {
+        new ListCreation().initializeBookList();
+        assertEquals("Please enter a numerical value.", new Library().reserveBook("not numerical"));
+    }
+
+    @Test
+    public void checkLibraryNumberThatExists() throws Exception {
+        new ListCreation().initializeCustomerList();
+        assertEquals("Please talk to Librarian. Thank you.", new Library().checkLibraryNumber("1111"));
+    }
+
+    @Test
+    public void checkNonNumericalLibraryNumber() throws Exception {
+        new ListCreation().initializeCustomerList();
+        assertEquals("Library number should be numeric.", new Library().checkLibraryNumber("not numerical"));
     }
 }
