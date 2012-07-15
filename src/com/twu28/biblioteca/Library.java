@@ -23,10 +23,8 @@ public class Library {
     public Object checkOption(String stringOption) {
         int option;
         String optionSelected="Select a valid option!";
-        try {
-            option=Integer.parseInt(stringOption);
-        } catch (Exception e) {
-            System.out.println(optionSelected);
+        option=convertStringToInteger(stringOption, optionSelected);  //get the numeric value
+        if(option==Integer.MIN_VALUE) {
             return optionSelected;
         }
         switch(option) {
@@ -64,10 +62,8 @@ public class Library {
     public Object reserveBook(String selectedBook) {
         int selectedBookNumber;
         String outputString="Please enter a numerical value.";
-        try {
-            selectedBookNumber=Integer.parseInt(selectedBook);
-        } catch(Exception e) {
-            System.out.println(outputString);
+        selectedBookNumber=convertStringToInteger(selectedBook, outputString); //get the numeric value
+        if(selectedBookNumber==Integer.MIN_VALUE) {
             return outputString;
         }
         try {
@@ -86,13 +82,12 @@ public class Library {
         return outputString;
     }
 
+    //checks the library number of the user
     public Object checkLibraryNumber(String stringLibraryNumber) {
         int libraryNumber;
         String outputString="Library number should be numeric.";
-        try {
-            libraryNumber=Integer.parseInt(stringLibraryNumber);
-        } catch(Exception e) {
-            System.out.println(outputString);
+        libraryNumber=convertStringToInteger(stringLibraryNumber, outputString); //get the numeric value
+        if(libraryNumber==Integer.MIN_VALUE) {
             return outputString;
         }
         outputString="Please talk to Librarian. Thank you.";
@@ -106,6 +101,17 @@ public class Library {
         System.out.println("No such library number found!");
         System.out.println(outputString);
         return outputString;
+    }
+
+    //returns a whole number value equal to the number contained in the input of the user
+    public int convertStringToInteger(String numString, String outputString) {
+        int integerValue=Integer.MIN_VALUE;
+        try {
+            integerValue=Integer.parseInt(numString);
+        } catch(Exception e) {
+            System.out.println(outputString);
+        }
+        return integerValue;
     }
 
     public static void main(String args[]) {

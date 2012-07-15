@@ -34,6 +34,7 @@ public class ListCreation {
         bookList.add(book);
     }
 
+    //creates a list of customers
     public void initializeCustomerList() {
         addCustomer(1111,"customer1");
         addCustomer(2222,"customer2");
@@ -42,6 +43,7 @@ public class ListCreation {
         addCustomer(5555,"customer5");
     }
 
+    //adds a customer to the list of customers
     public void addCustomer(int library_no, String name) {
         Customer customer=new Customer();
         customer.setCustomerDetails(library_no, name);
