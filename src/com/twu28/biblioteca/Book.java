@@ -25,8 +25,8 @@ public class Book {
         this.availability=availability;
     }
 
-    public String getAvailability() {
-        return availability;
+    public boolean isAvailable() {
+        return availability.equals("available");
     }
 
     public void setAvailability(String availability) {

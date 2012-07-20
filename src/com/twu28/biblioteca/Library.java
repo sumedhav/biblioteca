@@ -11,12 +11,16 @@ package com.twu28.biblioteca;
  */
 public class Library {
 
+    private String username;
+    private boolean loginStatus=false;
     //prints the list of menu options on the console
     public void printMenuOptions() {
         System.out.println("-------MENU-------");
         System.out.println("Enter 1 to view all the books in the library");
         System.out.println("Enter 2 to reserve a book");
         System.out.println("Enter 3 to check your library number");
+        System.out.println("Enter 4 to view the list of movies");
+        System.out.println("Enter 5 to login");
     }
 
     //checks the menu option entered by the user
@@ -37,8 +41,17 @@ public class Library {
                     reserveBook(selectedBook);  //reserve the specified book if available
                     break;
             case 3: optionSelected="check library number";
-                    String stringLibraryNumber=new LibraryHelper().getUserInput("\nEnter your library number");
-                    checkLibraryNumber(stringLibraryNumber);
+                    checkLibraryNumber(loginStatus);
+                    break;
+            case 4: optionSelected="view movies";
+                    viewMovieList();  //view the list of movies
+                    break;
+            case 5: optionSelected = "login";
+                    String loginId=new LibraryHelper().getUserInput("\nUsername:");
+                    String password=new LibraryHelper().getUserInput("\nPassword:");
+                    boolean status=checkIfUserExists(loginId,password);
+                    setLoginStatus(status);
+                    printUserLoginMessage();
                     break;
             default: System.out.println(optionSelected);
                      break;
@@ -51,7 +64,7 @@ public class Library {
         int serial_no=1;
         System.out.println("\n---------List of Books---------");
         System.out.printf("%-5s%-15s%-15s%-15s%-12s\n", "SNo.","Title","Author","ISBN-No.","Availability");
-        for (Book book : ListCreation.bookList) {
+        for (Book book : Repository.bookList) {
             System.out.printf("%-5d", serial_no);
             book.viewBookDetails();  //printing the book details on the console
             serial_no++;
@@ -67,8 +80,8 @@ public class Library {
             return outputString;
         }
         try {
-            Book book=ListCreation.bookList.get(selectedBookNumber-1);
-            if(book.getAvailability().equals("available")) {
+            Book book= Repository.findBook(selectedBookNumber);
+            if(book.isAvailable()) {
                 outputString="Thank You! Enjoy the book.";
                 book.setAvailability("reserved");
             } else {
@@ -83,24 +96,43 @@ public class Library {
     }
 
     //checks the library number of the user
-    public Object checkLibraryNumber(String stringLibraryNumber) {
-        int libraryNumber;
-        String outputString="Library number should be numeric.";
-        libraryNumber=convertStringToInteger(stringLibraryNumber, outputString); //get the numeric value
-        if(libraryNumber==Integer.MIN_VALUE) {
-            return outputString;
+    public Object checkLibraryNumber(boolean loginStatus) {
+        String outputString="Please talk to Librarian. Thank you.";
+        if(loginStatus) {
+            System.out.println("Your library number: "+username);
+            outputString="library number printed";
         }
-        outputString="Please talk to Librarian. Thank you.";
-        for(Customer customer: ListCreation.customerList) {
-            if(customer.getLibraryNumber()==libraryNumber) {
-                customer.viewCustomerDetails();
-                System.out.println(outputString);
-                return outputString;
+        else {
+            System.out.println(outputString);
+        }
+        return outputString;
+    }
+
+    public void viewMovieList() {
+        int serial_no=1;
+        System.out.println("\n---------List of Movies---------");
+        System.out.printf("%-5s%-25s%-20s%-5s\n","SNo.","Movie Name","Director","Rating");
+        for (Movie movie : Repository.movieList) {
+            System.out.printf("%-5s",serial_no);
+            movie.viewMovieDetails();  //printing the movie details on the console
+            serial_no++;
+        }
+    }
+
+    public boolean checkIfUserExists(String loginId, String password) {
+        boolean status=false;
+        username=loginId;
+        for(User user : Repository.userList) {
+            if(user.userExists(loginId,password)) {
+                status=true;
+                break;
             }
         }
-        System.out.println("No such library number found!");
-        System.out.println(outputString);
-        return outputString;
+        return status;
+    }
+
+    private void setLoginStatus(boolean status) {
+        loginStatus=status;
     }
 
     //returns a whole number value equal to the number contained in the input of the user
@@ -114,12 +146,21 @@ public class Library {
         return integerValue;
     }
 
+    public void printUserLoginMessage() {
+        if(loginStatus) {
+            System.out.println("You are now logged in!");
+        }
+        else {
+            System.out.println("Incorrect login details!");
+        }
+    }
+
     public static void main(String args[]) {
         Library library=new Library();
         LibraryHelper libraryHelper=new LibraryHelper();
-        ListCreation listCreation=new ListCreation();
+        Repository repository =new Repository();
         String selectedOption, choice="y";
-        listCreation.initializeLists();  //create the required lists
+        repository.initializeLists();  //create the required lists
         System.out.println("\n!!!Welcome to the Bangalore Public Library System!!!\n");
         while(choice.equals("y") || choice.equals("Y")) {
             library.printMenuOptions();  //printing the menu options

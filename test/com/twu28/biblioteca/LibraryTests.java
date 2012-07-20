@@ -16,13 +16,18 @@ public class LibraryTests {
 
     @Test
     public void optionEnteredIsOne() throws Exception {
-        new ListCreation().initializeLists();
+        new Repository().initializeLists();
         assertEquals("view books", new Library().checkOption("1"));
     }
 
     @Test
     public void optionEnteredIsFour() throws Exception {
-        assertEquals("Select a valid option!", new Library().checkOption("4"));
+        assertEquals("view movies", new Library().checkOption("4"));
+    }
+
+    @Test
+    public void optionEnteredIsSix() throws Exception {
+        assertEquals("Select a valid option!", new Library().checkOption("6"));
     }
 
     @Test
@@ -46,12 +51,12 @@ public class LibraryTests {
     }
 
     @Test
-    public void checkLibraryNumberThatExists() throws Exception {
-        assertEquals("Please talk to Librarian. Thank you.", new Library().checkLibraryNumber("1111"));
+    public void checkLibraryNumberWhenUserIsNotLoggedIn() throws Exception {
+        assertEquals("Please talk to Librarian. Thank you.", new Library().checkLibraryNumber(false));
     }
 
     @Test
-    public void checkNonNumericalLibraryNumber() throws Exception {
-        assertEquals("Library number should be numeric.", new Library().checkLibraryNumber("not numerical"));
+    public void checkLibraryNumberWhenUserIsLoggedIn() throws Exception {
+        assertEquals("library number printed", new Library().checkLibraryNumber(true));
     }
 }
