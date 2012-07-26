@@ -59,4 +59,14 @@ public class LibraryTests {
     public void checkLibraryNumberWhenUserIsLoggedIn() throws Exception {
         assertEquals("library number printed", new Library().checkLibraryNumber(true));
     }
+
+    @Test
+    public void checkForAnExistingUser() throws Exception {
+        assertEquals(true, new Library().checkIfUserExists("111-1111","abcdef123"));
+    }
+
+    @Test
+    public void checkForANonExistingUser() throws Exception {
+        assertEquals(false, new Library().checkIfUserExists("111-1119","password9"));
+    }
 }
