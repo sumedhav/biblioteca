@@ -11,16 +11,15 @@ import java.util.ArrayList;
  */
 public class UserRepository {
 
-    private ArrayList<User> userList=new ArrayList<User>();
+    static ArrayList<User> userList=new ArrayList<User>();
 
     //creates a list of users
-    public ArrayList<User> initializeUserList() {
+    public void initializeUserList() {
         addUser("111-1111", "abcdef123", "user1");
         addUser("111-1112", "password2", "user2");
         addUser("111-1113", "password3", "user3");
         addUser("111-1114", "password4", "user4");
         addUser("111-1115", "password5", "user5");
-        return userList;
     }
 
     //adds a user to the list of users

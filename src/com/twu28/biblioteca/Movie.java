@@ -18,8 +18,21 @@ public class Movie {
         this.rating=rating;
     }
 
+    public String getMovieName() {
+        return movie_name;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
     public void viewMovieDetails() {
-        System.out.printf("%-25s%-20s%-5s\n",movie_name,director,rating);
+        System.out.printf("%-25s%-20s%-5s\n",getMovieName(),getDirector(),getRating());
+
     }
 
 }

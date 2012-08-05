@@ -1,5 +1,7 @@
 package com.twu28.biblioteca;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,59 +16,71 @@ import static org.junit.Assert.assertEquals;
  */
 public class LibraryTests {
 
+    private Library library;
+    @BeforeClass
+    public static void initializeLists() throws Exception {
+        new BookRepository().initializeBookList();
+        new MovieRepository().initializeMovieList();
+        new UserRepository().initializeUserList();
+    }
+
+    @Before
+    public void createLibraryObject() throws Exception {
+        library=new LibraryFactory().createLibrary();
+    }
+
     @Test
     public void optionEnteredIsOne() throws Exception {
-        new Repository().initializeLists();
-        assertEquals("view books", new Library().checkOption("1"));
+        assertEquals("view books", library.checkOption("1"));
     }
 
     @Test
     public void optionEnteredIsFour() throws Exception {
-        assertEquals("view movies", new Library().checkOption("4"));
+        assertEquals("view movies", library.checkOption("4"));
     }
 
     @Test
     public void optionEnteredIsSix() throws Exception {
-        assertEquals("Select a valid option!", new Library().checkOption("6"));
+        assertEquals("Select a valid option!", library.checkOption("6"));
     }
 
     @Test
     public void optionEnteredIsNotNumerical() throws Exception {
-        assertEquals("Select a valid option!", new Library().checkOption("hi"));
+        assertEquals("Select a valid option!", library.checkOption("hi"));
     }
 
     @Test
     public void reserveBookNumberOne() throws Exception {
-        assertEquals("Thank You! Enjoy the book.", new Library().reserveBook("1"));
+        assertEquals("Thank You! Enjoy the book.", library.reserveBook("1"));
     }
 
     @Test
     public void reserveBookNumberTwo() throws Exception {
-        assertEquals("Sorry we don't have that book yet.", new Library().reserveBook("2"));
+        assertEquals("Sorry we don't have that book yet.", library.reserveBook("2"));
     }
 
     @Test
     public void reserveBookNumberNotNumerical() throws Exception {
-        assertEquals("Please enter a numerical value.", new Library().reserveBook("not numerical"));
+        assertEquals("Please enter a numerical value.", library.reserveBook("not numerical"));
     }
 
     @Test
     public void checkLibraryNumberWhenUserIsNotLoggedIn() throws Exception {
-        assertEquals("Please talk to Librarian. Thank you.", new Library().checkLibraryNumber(false));
+        assertEquals("Please talk to Librarian. Thank you.", library.checkLibraryNumber(false));
     }
 
     @Test
     public void checkLibraryNumberWhenUserIsLoggedIn() throws Exception {
-        assertEquals("library number printed", new Library().checkLibraryNumber(true));
+        assertEquals("library number printed", library.checkLibraryNumber(true));
     }
 
     @Test
     public void checkForAnExistingUser() throws Exception {
-        assertEquals(true, new Library().checkIfUserExists("111-1111","abcdef123"));
+        assertEquals(true, library.checkIfUserExists("111-1111","abcdef123"));
     }
 
     @Test
     public void checkForANonExistingUser() throws Exception {
-        assertEquals(false, new Library().checkIfUserExists("111-1119","password9"));
+        assertEquals(false, library.checkIfUserExists("111-1119","password9"));
     }
 }

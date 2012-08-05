@@ -11,9 +11,9 @@ import java.util.ArrayList;
  */
 public class MovieRepository {
 
-    private ArrayList<Movie> movieList=new ArrayList<Movie>();
+    static ArrayList<Movie> movieList=new ArrayList<Movie>();
 
-    public ArrayList<Movie> initializeMovieList() {
+    public void initializeMovieList() {
         addMovie("Sholay","Ramesh Sippy","8");
         addMovie("Golmaal","H. Mukherjee","8");
         addMovie("Dark Knight Rises","Nolan","N/A");
@@ -29,7 +29,6 @@ public class MovieRepository {
         addMovie("Movie name8","Director8","6");
         addMovie("Movie name9","Director9","7");
         addMovie("Movie name10","Director10","5");
-        return movieList;
     }
 
     public void addMovie(String movieName, String director, String rating) {

@@ -11,22 +11,25 @@ import java.util.ArrayList;
  */
 public class BookRepository {
 
-    private ArrayList<Book> bookList=new ArrayList<Book>();
+    static ArrayList<Book> bookList=new ArrayList<Book>();
 
     //creates a list of books
-    public ArrayList<Book> initializeBookList() {
+    public void initializeBookList() {
         addBook("Book1","Author1","ISBN-1111","available");
         addBook("Book2","Author2","ISBN-2222","not available");
         addBook("Book3","Author3","ISBN-3333","available");
         addBook("Book4","Author4","ISBN-4444","available");
         addBook("Book5","Author5","ISBN-5555","not available");
-        return bookList;
     }
 
     //adds a book to the list of books
     public void addBook(String title, String author, String isbn_no, String availability) {
         Book book=new Book(title, author, isbn_no, availability);
         bookList.add(book);
+    }
+
+    public static Book findBook(int bookNumber) {
+        return bookList.get(bookNumber-1);
     }
 
 }

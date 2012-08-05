@@ -13,6 +13,22 @@ public class Library {
 
     private String username;
     private boolean loginStatus=false;
+    private BookRepository bookRepository;
+    private MovieRepository movieRepository;
+    private UserRepository userRepository;
+
+    public Library(BookRepository bookRepository, MovieRepository movieRepository, UserRepository userRepository) {
+        this.bookRepository=bookRepository;
+        this.movieRepository=movieRepository;
+        this.userRepository=userRepository;
+    }
+
+    public void initializeAllLists() {
+        bookRepository.initializeBookList();
+        movieRepository.initializeMovieList();
+        userRepository.initializeUserList();
+    }
+
     //prints the list of menu options on the console
     public void printMenuOptions() {
         System.out.println("-------MENU-------");
@@ -64,7 +80,7 @@ public class Library {
         int serial_no=1;
         System.out.println("\n---------List of Books---------");
         System.out.printf("%-5s%-15s%-15s%-15s%-12s\n", "SNo.","Title","Author","ISBN-No.","Availability");
-        for (Book book : Repository.bookList) {
+        for (Book book : BookRepository.bookList) {
             System.out.printf("%-5d", serial_no);
             book.viewBookDetails();  //printing the book details on the console
             serial_no++;
@@ -80,7 +96,7 @@ public class Library {
             return outputString;
         }
         try {
-            Book book= Repository.findBook(selectedBookNumber);
+            Book book= BookRepository.findBook(selectedBookNumber);
             if(book.isAvailable()) {
                 outputString="Thank You! Enjoy the book.";
                 book.setAvailability("reserved");
@@ -112,7 +128,7 @@ public class Library {
         int serial_no=1;
         System.out.println("\n---------List of Movies---------");
         System.out.printf("%-5s%-25s%-20s%-5s\n","SNo.","Movie Name","Director","Rating");
-        for (Movie movie : Repository.movieList) {
+        for (Movie movie : MovieRepository.movieList) {
             System.out.printf("%-5s",serial_no);
             movie.viewMovieDetails();  //printing the movie details on the console
             serial_no++;
@@ -122,7 +138,7 @@ public class Library {
     public boolean checkIfUserExists(String loginId, String password) {
         boolean status=false;
         username=loginId;
-        for(User user : Repository.userList) {
+        for(User user : UserRepository.userList) {
             if(user.userExists(loginId,password)) {
                 status=true;
                 break;
@@ -156,11 +172,10 @@ public class Library {
     }
 
     public static void main(String args[]) {
-        Library library=new Library();
+        Library library=new LibraryFactory().createLibrary();
         LibraryHelper libraryHelper=new LibraryHelper();
-        Repository repository =new Repository();
         String selectedOption, choice="y";
-        repository.initializeLists();  //create the required lists
+        library.initializeAllLists();
         System.out.println("\n!!!Welcome to the Bangalore Public Library System!!!\n");
         while(choice.equals("y") || choice.equals("Y")) {
             library.printMenuOptions();  //printing the menu options

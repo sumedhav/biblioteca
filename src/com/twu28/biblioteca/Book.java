@@ -33,8 +33,24 @@ public class Book {
         this.availability=availability;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbnNumber() {
+        return isbn_number;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
     public void viewBookDetails() {
-        System.out.printf("%-15s%-15s%-15s%-12s\n", title, author, isbn_number, availability);
+        System.out.printf("%-15s%-15s%-15s%-12s\n", getTitle(),getAuthor(), getIsbnNumber(),getAvailability());
     }
 
 }
